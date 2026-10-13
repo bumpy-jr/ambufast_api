@@ -20,7 +20,7 @@ try {
     $st->close();
 
     $st = $conn->prepare("SELECT COUNT(*) AS n FROM asignaciones
-                          WHERE id_ambulancia = ? AND fecha_finalizacion IS NOT NULL AND DATE(fecha_finalizacion) = CURDATE()");
+                          WHERE id_ambulancia = ? AND fecha_finalizacion IS NOT NULL AND estado IN ('COMPLETADA','FINALIZADA') AND DATE(fecha_finalizacion) = CURDATE()");
     $st->bind_param("i", $id);
     $st->execute();
     $servicios = (int)$st->get_result()->fetch_assoc()["n"];
@@ -73,7 +73,7 @@ try {
     // Últimos 5 servicios finalizados.
     $st = $conn->prepare("SELECT i.direccion, i.gravedad, a.fecha_finalizacion
                           FROM asignaciones a JOIN incidentes i ON i.id_incidente = a.id_incidente
-                          WHERE a.id_ambulancia = ? AND a.fecha_finalizacion IS NOT NULL
+                          WHERE a.id_ambulancia = ? AND a.fecha_finalizacion IS NOT NULL AND a.estado IN ('COMPLETADA','FINALIZADA')
                           ORDER BY a.fecha_finalizacion DESC LIMIT 5");
     $st->bind_param("i", $id);
     $st->execute();

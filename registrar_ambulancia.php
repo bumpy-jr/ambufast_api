@@ -277,8 +277,9 @@ $stmtDupLicencia->close();
 // VIGENCIA DE LA LICENCIA
 // =====================================================
 
-$hoy = new DateTime();
-$vencimiento = new DateTime($licenciaVence);
+$zona = new DateTimeZone("America/Bogota");
+$hoy = new DateTime("today", $zona);          // medianoche de hoy: la licencia vale todo su último día
+$vencimiento = new DateTime($licenciaVence, $zona);
 $licenciaVencida = $vencimiento < $hoy;
 
 $confirmarVencida = $conductor["confirmarVencida"] ?? false;
